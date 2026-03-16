@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolioku.id | Not Just a Portfolio, But your best Brand Online</title>
+    <!-- Open Graph / Social Meta Tags -->
+    <meta property="og:title" content="Portfolioku.id | Not Just a Portfolio, But your best Brand Online">
+    <meta property="og:description" content="Kami merancang website yang bersih, modern, dan fokus pada konversi. Memadukan strategi dan interaksi untuk menciptakan pengalaman digital yang tidak hanya indah, tapi juga berperforma tinggi.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200">
+    <meta property="og:url" content="https://portfolioku.id/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="description" content="Kami merancang website yang bersih, modern, dan fokus pada konversi. Memadukan strategi dan interaksi untuk menciptakan pengalaman digital yang tidak hanya indah, tapi juga berperforma tinggi.">
+    <link rel="canonical" href="https://portfolioku.id/">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self'; media-src 'self';">
+    <!-- Preconnect for faster CDN/font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <!-- TODO (P1): Replace Tailwind CDN with a build-time purged version for production -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- TODO (S3): Add integrity and crossorigin attributes once SRI hashes are verified for these CDN files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #ff591c; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            scroll-behavior: smooth;
+        }
+        
+        /* Focus visible styles for accessibility */
+        .focus-visible:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        
+        /* Focus visible fallback for browsers that don't support :focus-visible */
+        .focus-visible:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        .serif { font-family: 'Playfair Display', serif; }
+        .text-accent { color: var(--accent); }
+        .bg-accent { background-color: var(--accent); }
+        
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 20px; height: 20px; background: rgba(255, 89, 28, 0.3);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9999; transition: transform 0.1s ease;
+        }
+        
+        /* Entrance Animation States */
+        section { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
+        section.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* Hero video background */
+        .hero-shell {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-video-wrap {
+            position: absolute;
+            inset: 0 0 0 auto;
+            width: min(48vw, 760px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.78) 62%, #ffffff 100%);
+            isolation: isolate;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hero-video-wrap::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.94) 18%, rgba(255, 255, 255, 0.35) 48%, rgba(255, 255, 255, 0.08) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-video-wrap::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.42) 72%, rgba(255, 255, 255, 0.92) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hero-video {
+            display: block;
+            position: relative;
+            z-index: 0;
+            width: auto;
+            height: 100%;
+            max-width: none;
+            object-position: right center;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .price-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        
+        .signature-font {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        /* Layout Proportions */
+        .hero-content-area {
+            max-width: 650px;
+        }
+
+        .hero-mobile-offset {
+            padding-top: calc(var(--nav-height, 88px) + 8px);
+        }
+
+        @media (min-width: 768px) {
+            .hero-mobile-offset {
+                padding-top: 0;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .hero-video-wrap {
+                width: 100%;
+                inset: 0;
+                opacity: 0.28;
+            }
+
+            .hero-video-wrap::before {
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 35%, rgba(255, 255, 255, 0.42) 100%);
+            }
+        }
+
+        /* WhatsApp Glow Button */
+        .wa-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #25D366;
+            color: #ffffff;
+            padding: 7px 10px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: wa-glow 2.4s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        @media (min-width: 768px) {
+            .wa-btn {
+                padding: 10px 18px;
+                font-size: 11px;
+                gap: 8px;
+                letter-spacing: 0.15em;
+            }
+        }
+        .wa-btn:hover {
+            transform: scale(1.06);
+            animation-play-state: paused;
+            box-shadow: 0 0 28px rgba(37, 211, 102, 1), 0 0 50px rgba(37, 211, 102, 0.5);
+        }
+        @keyframes wa-glow {
+            0%, 100% { box-shadow: 0 0 8px rgba(37, 211, 102, 0.5), 0 0 16px rgba(37, 211, 102, 0.2); }
+            50%       { box-shadow: 0 0 22px rgba(37, 211, 102, 0.9), 0 0 44px rgba(37, 211, 102, 0.4); }
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Portfolioku.id",
+        "url": "https://portfolioku.id/",
+        "description": "Kami merancang website yang bersih, modern, dan fokus pada konversi.",
+        "serviceType": "Web Design & Development",
+        "areaServed": "ID"
+    }
+    </script>
+</head>
+<body class="antialiased overflow-x-hidden bg-white">
+
+    <div id="cursor" class="custom-cursor hidden md:block"></div>
+
+<!-- Navigation -->
+    <nav id="site-nav" class="fixed top-0 left-0 w-full z-50 px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md">
+         <div class="text-xl font-extrabold tracking-tighter">PORTFOLIOKU<span class="text-accent">.ID</span></div>
+         <div class="hidden md:flex gap-10 font-bold text-[10px] tracking-[0.2em] uppercase">
+             <a href="#samples" class="hover:text-accent transition-all focus-visible">Samples</a>
+             <a href="#problems" class="hover:text-accent transition-all focus-visible">Strategy</a>
+             <a href="#services" class="hover:text-accent transition-all focus-visible">Pricing</a>
+             <a href="#faq" class="hover:text-accent transition-all focus-visible">FAQ</a>
+         </div>
+         <a href="https://wa.me/6285697519388?text=Saya%20Mau%20Bikin%20Design%20Portfolio%20dong%20!" rel="noopener noreferrer" class="wa-btn focus-visible" aria-label="Chat via WhatsApp">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+             WA Me!
+         </a>
+     </nav>
+
+     <main>
+         <!-- 1. Hero Section (Clean Reference Style) -->
+    <section id="hero" class="hero-shell hero-mobile-offset is-visible bg-white min-h-screen flex items-center">
+        <div class="hero-video-wrap">
+            <video autoplay muted loop playsinline aria-label="Hero showcase video" poster="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800" class="hero-video object-cover md:object-contain">
+                <source src="videos/hero%20portfolioku_3.mp4" type="video/mp4">
+            </video>
+        </div>
+        <!-- Left: Text Content -->
+         <div class="hero-copy w-full md:w-[55%] flex flex-col justify-center items-center md:items-start text-center md:text-left px-6 md:px-8 py-12 md:py-24">
+            <div class="hero-content-area">
+<p class="text-gray-400 font-bold tracking-[0.3em] text-[10px] mb-4 uppercase">I'm Portfolioku.id</p>
+                 <h1 class="text-4xl md:text-5xl font-extrabold leading-[1.1] tracking-tighter mb-6">
+                     Not Just a Portfolio, But your best <span class="relative inline-block">Brand<span class="absolute left-0 bottom-2 w-full h-1 bg-accent opacity-30"></span></span> Online
+                 </h1>
+                <p class="text-gray-500 text-lg md:text-xl mb-10 leading-relaxed font-light">
+                    Kami merancang website yang bersih, modern, dan fokus pada konversi. Memadukan strategi dan interaksi untuk menciptakan pengalaman digital yang tidak hanya indah, tapi juga berperforma tinggi.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center gap-8 mb-12">
+                    <a href="#services" class="bg-accent text-white px-10 py-4 rounded-lg font-bold shadow-xl shadow-orange-100 hover:scale-105 transition-all text-sm tracking-widest">
+                        EXPLORE THE BRAND
+                    </a>
+                </div>
+
+                <!-- Socials & Signature -->
+                <div class="flex flex-col items-center md:items-start gap-6">
+                    <div class="flex gap-6 text-gray-400">
+<a href="#" class="hover:text-accent transition-colors" aria-label="Behance profile">Be</a>
+                         <a href="#" class="hover:text-accent transition-colors" aria-label="Instagram profile">Ig</a>
+                         <a href="#" class="hover:text-accent transition-colors" aria-label="LinkedIn profile">Li</a>
+                         <a href="#" class="hover:text-accent transition-colors" aria-label="Twitter profile">Tw</a>
+                         <a href="#" class="hover:text-accent transition-colors" aria-label="Dribbble profile">Dr</a>
+                    </div>
+                    <div class="signature-font">Portfolioku.id</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Sample Designs -->
+    <section id="samples" class="py-32 px-8 bg-white border-t border-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4">Selected Work</h2>
+                <p class="text-gray-400 italic serif">Desain yang berbicara lebih keras dari kata-kata.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="group">
+<div class="aspect-[3/4] overflow-hidden rounded-xl bg-gray-50 mb-6">
+                         <img loading="lazy" width="800" height="1067" src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800" alt="The Architect: Branding & UI project showcase" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale hover:grayscale-0">
+                     </div>
+                    <h3 class="font-bold text-xl uppercase tracking-tighter">The Architect</h3>
+                    <p class="text-accent text-xs font-bold tracking-widest mt-1">BRANDING & UI</p>
+                </div>
+                <div class="group">
+<div class="aspect-[3/4] overflow-hidden rounded-xl bg-gray-50 mb-6">
+                         <img loading="lazy" width="800" height="1067" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" alt="Digital Creator: Portfolio system demonstration" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale hover:grayscale-0">
+                     </div>
+                    <h3 class="font-bold text-xl uppercase tracking-tighter">Digital Creator</h3>
+                    <p class="text-accent text-xs font-bold tracking-widest mt-1">PORTFOLIO SYSTEM</p>
+                </div>
+                <div class="group">
+<div class="aspect-[3/4] overflow-hidden rounded-xl bg-gray-50 mb-6">
+                         <img loading="lazy" width="800" height="1067" src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800" alt="Agency Frame: Web development project example" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale hover:grayscale-0">
+                     </div>
+                    <h3 class="font-bold text-xl uppercase tracking-tighter">Agency Frame</h3>
+                    <p class="text-accent text-xs font-bold tracking-widest mt-1">WEB DEVELOPMENT</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Testimonials -->
+    <section class="py-32 bg-gray-50 px-8">
+        <div class="max-w-3xl mx-auto text-center">
+            <span class="text-6xl text-accent opacity-20 serif italic">"</span>
+            <p class="text-2xl md:text-4xl font-light leading-snug mb-10 -mt-6">
+                Portfolioku.id mengubah cara saya mempresentasikan diri. Sekarang saya tidak hanya mengirim link, saya mengirimkan <span class="font-bold">pengalaman brand.</span>
+            </p>
+            <div class="flex flex-col items-center">
+                <div class="w-12 h-[1px] bg-accent mb-6"></div>
+                <h4 class="font-bold tracking-widest text-xs uppercase">Rizky Amalia</h4>
+                <p class="text-gray-400 text-[10px] mt-1 uppercase tracking-widest">Freelance Illustrator</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Problems Section -->
+    <section id="problems" class="py-32 px-8 bg-white">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-24 items-center">
+            <div class="order-2 md:order-1">
+                <div class="w-full aspect-square bg-gray-100 rounded-full overflow-hidden p-12">
+                    <div class="w-full h-full border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center text-gray-300 italic">Visual Strategy Map</div>
+                </div>
+            </div>
+            <div class="order-1 md:order-2">
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter mb-8">Stop Being <span class="block"><span class="text-accent italic serif font-normal italic">Just Another</span> Link.</span></h2>
+                <div class="space-y-8">
+                    <div>
+                        <h4 class="font-bold mb-2 uppercase text-sm tracking-widest">The Problem</h4>
+                        <p class="text-gray-500 text-sm">Portfolio standar seringkali membosankan dan tidak memiliki jiwa, membuat klien sulit membedakan Anda dengan ribuan orang lainnya.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2 uppercase text-sm tracking-widest">Our Solution</h4>
+                        <p class="text-gray-500 text-sm">Kami membangun ekosistem digital yang menonjolkan kepribadian dan nilai profesional Anda secara elegan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Services & Pricing -->
+    <section id="services" class="py-32 px-8 bg-gray-50">
+        <div class="max-w-7xl mx-auto text-center mb-20">
+            <h2 class="text-5xl font-extrabold tracking-tighter mb-4">Investasi Masa Depan</h2>
+            <p class="text-gray-400 italic serif">Pilih level branding yang Anda butuhkan.</p>
+        </div>
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Price Card 1 -->
+            <div class="price-card bg-white p-12 rounded-2xl border border-gray-100 transition-all flex flex-col hover:shadow-2xl">
+                <h3 class="font-bold text-xs tracking-[0.3em] text-gray-400 mb-8 uppercase">Essential</h3>
+                <div class="text-3xl font-extrabold mb-10">Rp 500k</div>
+                <ul class="text-gray-500 text-xs space-y-5 mb-12 flex-grow">
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Clean Single Page</li>
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Mobile Optimized</li>
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Social Integration</li>
+                </ul>
+                <button type="button" class="w-full py-4 border border-gray-200 text-xs font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-all">Order Now</button>
+            </div>
+            <!-- Price Card 2 (Featured) -->
+            <div class="price-card bg-white p-12 rounded-2xl border-2 border-accent transition-all flex flex-col shadow-2xl scale-105 z-10">
+                <h3 class="font-bold text-xs tracking-[0.3em] text-accent mb-8 uppercase">Professional</h3>
+                <div class="text-3xl font-extrabold mb-10">Rp 750k</div>
+                <ul class="text-gray-500 text-xs space-y-5 mb-12 flex-grow">
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Custom Domain .id</li>
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Multi-page Experience</li>
+                    <li class="flex items-center gap-3 italic text-accent font-bold"><span aria-hidden="true">✓</span> GSAP Basic Animations</li>
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> SEO Setup</li>
+                </ul>
+                <button type="button" class="w-full py-4 bg-accent text-white text-xs font-bold tracking-widest uppercase hover:opacity-90 transition-all">Get Started</button>
+            </div>
+            <!-- Price Card 3 -->
+            <div class="price-card bg-white p-12 rounded-2xl border border-gray-100 transition-all flex flex-col hover:shadow-2xl">
+                <h3 class="font-bold text-xs tracking-[0.3em] text-gray-400 mb-8 uppercase">Premium</h3>
+                <div class="text-3xl font-extrabold mb-10">Rp 1jt</div>
+                <ul class="text-gray-500 text-xs space-y-5 mb-12 flex-grow">
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Custom GSAP Motion</li>
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> CMS Integration</li>
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Premium Hosting</li>
+                    <li class="flex items-center gap-3 italic"><span class="text-accent" aria-hidden="true">✓</span> Priority Support</li>
+                </ul>
+                <button type="button" class="w-full py-4 border border-gray-900 text-gray-900 text-xs font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-all">Upgrade Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Call To Action -->
+    <section class="py-40 px-8 bg-white text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-5xl md:text-8xl font-extrabold mb-12 tracking-tighter leading-none">Waktunya <br><span class="text-accent">Tampil Beda.</span></h2>
+            <p class="text-gray-400 text-lg mb-16 max-w-lg mx-auto">Mari buat dunia terkesan dengan brand online terbaik Anda.</p>
+            <a href="https://wa.me/6285697519388?text=Saya%20Mau%20Bikin%20Design%20Portfolio%20dong%20!" rel="noopener noreferrer" class="bg-accent text-white px-16 py-6 rounded-full font-black text-xs tracking-[0.3em] uppercase hover:scale-105 transition-transform inline-block">Mulai Projek Sekarang</a>
+        </div>
+    </section>
+
+    <!-- 7. FAQ -->
+    <section id="faq" class="py-32 px-8 bg-white border-t border-gray-50">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-2xl font-extrabold mb-16 text-center tracking-[0.2em] uppercase">FAQ</h2>
+            <div class="space-y-10">
+                <div>
+                    <button type="button" aria-expanded="false" class="faq-toggle w-full flex justify-between items-center text-left font-bold text-xs tracking-widest uppercase">
+                        Berapa lama prosesnya?
+                        <span class="text-accent text-lg">+</span>
+                    </button>
+                    <div class="faq-content hidden pt-4 text-gray-400 text-xs leading-loose italic">
+                        Pengerjaan standar memakan waktu 7 hari kerja. Kami memastikan setiap detail sempurna sebelum peluncuran.
+                    </div>
+                </div>
+                <div>
+                    <button type="button" aria-expanded="false" class="faq-toggle w-full flex justify-between items-center text-left font-bold text-xs tracking-widest uppercase">
+                        Apakah bisa kustom desain?
+                        <span class="text-accent text-lg">+</span>
+                    </button>
+                    <div class="faq-content hidden pt-4 text-gray-400 text-xs leading-loose italic">
+                        Tentu. Kami mendesain dari nol (scratch) untuk memastikan brand Anda unik dan tidak terlihat seperti template pasaran.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     </main>
+
+     <footer class="py-20 px-8 border-t border-gray-50 text-center">
+         <div class="text-[10px] tracking-[0.5em] text-gray-300 uppercase">PORTFOLIOKU.ID — CREATING DIGITAL AUTHORITY</div>
+     </footer>
+
+    <script>
+        // Cursor
+        const cursor = document.getElementById('cursor');
+        const siteNav = document.getElementById('site-nav');
+
+        const syncNavHeight = () => {
+            if (!siteNav) {
+                return;
+            }
+
+            document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight}px`);
+        };
+
+        syncNavHeight();
+        window.addEventListener('resize', syncNavHeight);
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = (e.clientX - 10) + 'px';
+            cursor.style.top = (e.clientY - 10) + 'px';
+        });
+
+        // FAQ
+        document.querySelectorAll('.faq-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                content.classList.toggle('hidden');
+                const isExpanded = !content.classList.contains('hidden');
+                btn.setAttribute('aria-expanded', isExpanded);
+                btn.querySelector('span').textContent = isExpanded ? '-' : '+';
+            });
+        });
+
+        // GSAP
+        window.addEventListener('load', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Check for reduced motion preference
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            // Only run animations if user hasn't requested reduced motion
+            if (!prefersReducedMotion) {
+                document.querySelectorAll('section:not(#hero)').forEach(s => {
+                    gsap.to(s, {
+                        scrollTrigger: {
+                            trigger: s,
+                            start: "top 80%",
+                            onEnter: () => s.classList.add('is-visible')
+                        }
+                    });
+                });
+
+                // Parallax effect on hero video — lighter on mobile to avoid overlap
+                const isDesktop = window.innerWidth >= 768;
+
+                gsap.to(".hero-video", {
+                    scrollTrigger: {
+                        trigger: "#hero",
+                        start: "top top",
+                        scrub: true
+                    },
+                    y: isDesktop ? 50 : 18,
+                    scale: isDesktop ? 1.05 : 1.02
+                });
+            } else {
+                // If reduced motion is preferred, just show sections immediately
+                document.querySelectorAll('section').forEach(s => {
+                    s.classList.add('is-visible');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
