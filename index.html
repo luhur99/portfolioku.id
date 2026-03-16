@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preload" href="videos/hero%20portfolioku_3.mp4" as="video" type="video/mp4">
     <!-- TODO (P1): Replace Tailwind CDN with a build-time purged version for production -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- TODO (S3): Add integrity and crossorigin attributes once SRI hashes are verified for these CDN files -->
@@ -220,7 +221,7 @@
          <!-- 1. Hero Section (Clean Reference Style) -->
     <section id="hero" class="hero-shell hero-mobile-offset is-visible bg-white min-h-screen flex items-center">
         <div class="hero-video-wrap">
-            <video autoplay muted loop playsinline aria-label="Hero showcase video" poster="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800" class="hero-video object-cover md:object-contain">
+            <video autoplay muted loop playsinline preload="auto" aria-label="Hero showcase video" class="hero-video object-cover md:object-contain">
                 <source src="videos/hero%20portfolioku_3.mp4" type="video/mp4">
             </video>
         </div>
